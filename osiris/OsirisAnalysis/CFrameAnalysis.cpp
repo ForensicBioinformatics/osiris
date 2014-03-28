@@ -329,7 +329,6 @@ void CFrameAnalysis::_Build()
 	  );
   pSizerLabel->Add(
 	  m_pButtonBatchExport, 0, (wxALL ^ wxLEFT) | wxALIGN_CENTER_VERTICAL, ID_BORDER);
-  m_pButtonBatchExport->SetSizer(pSizerLabel);
 
   // end m_pPanelToolbar
 

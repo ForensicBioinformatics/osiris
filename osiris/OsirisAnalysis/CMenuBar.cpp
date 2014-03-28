@@ -53,7 +53,6 @@ CMenuBar::CMenuBar()
   pMenuTools->Append(IDlab,_T("Lab Settings\tAlt+L"));
   pMenuTools->Append(IDexport,_T("Export File Settings\tAlt+E"));
   pMenuTools->Append(IDeditColours,_T("Edit Grid Colors\tAlt+C"));
-  pMenuTools->Append(IDbatchPlotExport, _T("Batch Plot Export"));
   pMenuTools->Append(IDlog,_T("Message Log"));
   pMenuHelp->Append(IDhelp,_T("&Documentation\tF1"));
   pMenuHelp->Append(IDhelpContactUs,_T("&Contact Us..."));

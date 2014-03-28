@@ -368,12 +368,6 @@ CPanelPlotToolbar::CPanelPlotToolbar(
   pSizer->Add(m_pButtonDelete,0,nSizerFlags ^ wxRIGHT,ID_BORDER);
 
   m_pPanel->SetSizer(pSizer);
-  
-  // export button
-  m_pButtonExport = new wxButton(m_pPanel, IDBatchExportPrint, _T("BatchPrint"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
-  m_pButtonExport->Enable();
-  pSizer->Add(m_pButtonExport, 0, nSizerFlags ^ wxRIGHT, ID_BORDER);
-
   pSizer = new wxBoxSizer(wxHORIZONTAL);
   pSizer->Add(m_pPanel,1,wxEXPAND,0);
   SetSizer(pSizer);

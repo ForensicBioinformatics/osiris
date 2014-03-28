@@ -56,8 +56,6 @@
 // #include "nwx/CPointerHold.h"
 #include "nwx/nwxTimerReceiver.h"
 
-#include "nwx/nwxStaticBitmap.h"
-
 #include "CPlotData.h"
 #include "CMenuBar.h"
 #include "COsirisIcon.h"

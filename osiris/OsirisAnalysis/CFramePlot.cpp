@@ -1952,6 +1952,7 @@ bool CFramePlot::PrintPlot(wxString sFileName, wxString title) {
 		mainApp::ShowError(sError, this);
 		mainApp::LogMessage(sError);
 	}
+	m_pBitmap->CleanUpHandlers();
 	return returnFlag;
 }
 void CFramePlot::OnBatchExport() {
@@ -1961,6 +1962,8 @@ void CFramePlot::OnBatchExport() {
 
 	CPanelPlot *firstPlot = *m_setPlots.begin();
 	RemoveAllPlotsExcept(firstPlot);
+	int currentLabelType = firstPlot->GetLabelType();
+	firstPlot->SetLabelType(LABEL_ALL);
 
 	for (int i = firstPlot->GetPlotData()->GetChannelCount(); i > 0; --i) {
 		firstPlot->ShowOneChannel(i);
@@ -1990,6 +1993,7 @@ void CFramePlot::OnBatchExport() {
 		sFNO.SetName(baseName + _T("-L" << i));
 		PrintPlot(sFNO.GetFullPath(), (wxString)"Ladder, Channel " << i);
 	}
+	firstPlot->SetLabelType((LABEL_PLOT_TYPE)currentLabelType);
 }
 
 wxBitmap *CFramePlot::CreateBitmap(
