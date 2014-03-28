@@ -41,6 +41,7 @@
 enum
 {
   IDmenuDisplayNone = 0,
+  IDmenuDisplayAll,
   IDmenuDisplayAlleles,
   IDmenuDisplayBPS,
   IDmenuDisplayRFU,

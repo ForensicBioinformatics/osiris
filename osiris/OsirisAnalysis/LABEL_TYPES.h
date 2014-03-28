@@ -37,6 +37,7 @@
 enum LABEL_PLOT_TYPE
 {
   LABEL_NONE = 0,
+  LABEL_ALL,
   LABEL_ALLELE,
   LABEL_BPS,
   LABEL_RFU,
@@ -58,11 +59,11 @@ enum LABEL_CELL_TYPE
 
 static inline int PLOT_TO_CELL(int n)
 {
-  return (n > 0) ? (n - 1) : 0;
+  return (n > 0) ? (n - 2) : 0;
 }
 static inline int CELL_TO_PLOT(int n)
 {
-  return n + 1;
+  return n + 2;
 }
 
 
