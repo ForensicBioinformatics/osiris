@@ -56,6 +56,8 @@
 // #include "nwx/CPointerHold.h"
 #include "nwx/nwxTimerReceiver.h"
 
+#include "nwx/nwxStaticBitmap.h"
+
 #include "CPlotData.h"
 #include "CMenuBar.h"
 #include "COsirisIcon.h"
@@ -410,7 +412,17 @@ CFramePlot *mainFrame::OpenGraphicFile(
   }
   return pPlot;
 }
-
+void *mainFrame::PrintGraphicFile(const wxString sFileName, COARfile *pFile) {
+	auto_ptr<CPlotData> pData(new CPlotData());
+	pData->LoadFile(sFileName);
+	CFramePlot *pPlot(NULL);
+	wxSize sz = GetChildSize();
+	unsigned int nChannel = 0;
+	pPlot = new CFramePlot(this, sz, pData.release(), pFile, &m_kitColors, false, nChannel);
+	pPlot->OnBatchExport();
+	pPlot->Close();
+	return 0;
+}
 void mainFrame::OnQuit(wxCommandEvent &)
 {
   wxBusyCursor xxx;
@@ -682,7 +694,6 @@ void mainFrame::OnExportSettings(wxCommandEvent &)
     m_pMenuBar->UpdateFileMenu();
   }
 }
-
 void mainFrame::_CheckDragDropQueue()
 {
   list<wxString>::iterator itr = m_lsDragDropQueue.begin();
@@ -913,6 +924,17 @@ void mainFrame::OpenFile(
       OpenAnalysisFile(sFileName);
     }
   }
+}
+void mainFrame::PrintFile(const wxString sFileName, COARfile *pOARfile) {
+	CMDIFrame *pFrame = FindWindowByName(sFileName, false);
+	if (CheckMaxFrames(true)) { ; }
+	else if (FileInProgress(sFileName, true)) { ; }
+	else {
+		wxBusyCursor bzc;
+		wxString sFileLower(sFileName);
+		sFileLower.MakeLower();
+		PrintGraphicFile(sFileName, pOARfile);
+	}
 }
 
 void mainFrame::_CheckAnalysisFile(CFrameAnalysis *pWin)
@@ -1405,6 +1427,8 @@ void mainFrame::OnDropFiles(wxCommandEvent &)
   OpenFiles(m_pDropTarget->GetFiles());
 }
 
+void mainFrame::OnBatchPlotExport(wxCommandEvent &) {
+}
 
 BEGIN_EVENT_TABLE(mainFrame,wxMDIParentFrame)
 EVT_MENU_OPEN(mainFrame::OnMenuOpen)
@@ -1416,6 +1440,7 @@ EVT_MENU(IDlistMRU,   mainFrame::OnRecentFiles)
 EVT_MENU(IDlab,       mainFrame::OnLabSettings)
 EVT_MENU(IDexport,    mainFrame::OnExportSettings)
 EVT_MENU(IDeditColours, mainFrame::OnEditGridColours)
+EVT_MENU(IDbatchPlotExport, mainFrame::OnBatchPlotExport)
 EVT_MENU(IDanalyze,   mainFrame::OnAnalyze)
 EVT_MENU(IDopenPlot,  mainFrame::OnOpenPlot)
 EVT_MENU(IDopenBatch, mainFrame::OnOpenBatch)

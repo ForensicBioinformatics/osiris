@@ -1924,6 +1924,73 @@ void CFramePlot::OnSize(wxSizeEvent &e)
     e.Skip(true);
   }
 }
+bool CFramePlot::PrintPlot(wxString sFileName, wxString title) {
+	wxBusyCursor cr;
+	wxString sError;
+	wxBitmap *m_pBitmap = CreateBitmap(1600, 900, 72, title);
+	bool returnFlag = true;
+	if (m_pBitmap == NULL)
+	{
+		sError = _T("ERROR: Could not create image.");
+		wxASSERT_MSG(0, sError);
+		mainApp::LogMessage(sError);
+		returnFlag = false;
+	}
+	else
+	{
+		wxImage img = m_pBitmap->ConvertToImage();
+		nwxStaticBitmap::AddPngHandler();
+		if (!img.SaveFile(sFileName, wxBITMAP_TYPE_PNG))
+		{
+			sError = _T("ERROR: Could not save file: \n  ");
+			sError.Append(sFileName);
+			returnFlag = false;
+		}
+	}
+	if (!sError.IsEmpty())
+	{
+		mainApp::ShowError(sError, this);
+		mainApp::LogMessage(sError);
+	}
+	return returnFlag;
+}
+void CFramePlot::OnBatchExport() {
+	wxFileName sFNO = wxFileName(GetFileName(), wxPathFormat::wxPATH_NATIVE);
+	sFNO.SetExt(_T("png"));
+	wxString baseName = sFNO.GetName();
+
+	CPanelPlot *firstPlot = *m_setPlots.begin();
+	RemoveAllPlotsExcept(firstPlot);
+
+	for (int i = firstPlot->GetPlotData()->GetChannelCount(); i > 0; --i) {
+		firstPlot->ShowOneChannel(i);
+		firstPlot->RebuildCurves();
+		firstPlot->RebuildLabels();
+		firstPlot->ZoomOut();
+		sFNO.SetName(baseName + _T("-A" << i));
+		PrintPlot(sFNO.GetFullPath(), (wxString)"Analysed, Channel " << i);
+	}
+	firstPlot->GetMenuPlot()->ShowAnalyzed(false);
+	firstPlot->GetMenuPlot()->ShowRaw(true);
+	for (int i = firstPlot->GetPlotData()->GetChannelCount(); i > 0; --i) {
+		firstPlot->ShowOneChannel(i);
+		firstPlot->RebuildCurves();
+		firstPlot->RebuildLabels();
+		firstPlot->ZoomOut();
+		sFNO.SetName(baseName + _T("-R" << i));
+		PrintPlot(sFNO.GetFullPath(), (wxString)"Raw, Channel " << i);
+	}
+	firstPlot->GetMenuPlot()->ShowRaw(false);
+	firstPlot->GetMenuPlot()->ShowLadder(true);
+	for (int i = firstPlot->GetPlotData()->GetChannelCount(); i > 0; --i) {
+		firstPlot->ShowOneChannel(i);
+		firstPlot->RebuildCurves();
+		firstPlot->RebuildLabels();
+		firstPlot->ZoomOut();
+		sFNO.SetName(baseName + _T("-L" << i));
+		PrintPlot(sFNO.GetFullPath(), (wxString)"Ladder, Channel " << i);
+	}
+}
 
 wxBitmap *CFramePlot::CreateBitmap(
   int nWidth, int nHeight, int nDPI, const wxString &sTitle)

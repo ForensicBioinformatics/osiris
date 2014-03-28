@@ -605,26 +605,25 @@ wxString CPanelPlot::_AlleleLabel(
   const IOARpeak *pPeak, LABEL_PLOT_TYPE nType)
 {
   wxString sLabel;
-  wxString sLabela;
-  wxString sLabelb;
-  wxString sLabelc;
-  wxString sLabeld;
-  wxString sLabele;
   switch(nType)
   {
   case LABEL_ALL:
-	  sLabela = COARpeak::FormatAlleleName(
+	  sLabel = wxT("AL: ") + 
+		  COARpeak::FormatAlleleName(
 		  *pPeak,
 		  COARlocus::IsAmel(pPeak->GetLocusName()),
-		  true);
-	  sLabelb = nwxString::FormatNumber(
-		  nwxRound::Round(pPeak->GetBPS()));
-	  sLabelc = nwxString::FormatNumber(
-		  nwxRound::Round(pPeak->GetRFU()));
-	  sLabeld = nwxString::FormatNumber(pPeak->GetTime());
-	  sLabele = nwxString::FormatNumber(
+		  true) + 
+		  wxT("\nBP: ") + 
+		  nwxString::FormatNumber(
+		  nwxRound::Round(pPeak->GetBPS())) +
+		  wxT("\nRF: ") + 
+		  nwxString::FormatNumber(
+		  nwxRound::Round(pPeak->GetRFU())) +
+		  wxT("\nTI: ") + 
+		  nwxString::FormatNumber(pPeak->GetTime()) +
+		  wxT("\nPA: ") + 
+		  nwxString::FormatNumber(
 		  pPeak->GetPeakArea());
-	  sLabel = sLabela << ", " << sLabelb << ", " << sLabelc << ", " << sLabeld << ", " << sLabele;
 	break;
   case LABEL_ALLELE:
     sLabel = COARpeak::FormatAlleleName(
