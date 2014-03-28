@@ -475,9 +475,6 @@ void CParmOsiris::SetDefaults()
   // end generated defaults
 
   m_gridAttr.SetDefaults();
-
-  // multi label defaults
-  m_bMultiLineLabel = true;
 }
 bool CParmOsiris::Save()
 {

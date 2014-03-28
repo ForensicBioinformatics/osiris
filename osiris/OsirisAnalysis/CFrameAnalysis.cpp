@@ -319,16 +319,6 @@ void CFrameAnalysis::_Build()
     pSizerFileName,1,
     (wxALL ^ wxLEFT) | wxEXPAND | wxALIGN_CENTER_VERTICAL, ID_BORDER);
   m_pPanelToolbar->SetSizer(pSizerLabel);
-  m_pButtonBatchExport = new wxButton(
-	  m_pPanelToolbar,
-	  IDBatchExport,
-	  _T("Batch Export"),
-	  wxDefaultPosition,
-	  wxDefaultSize,
-	  wxBU_EXACTFIT
-	  );
-  pSizerLabel->Add(
-	  m_pButtonBatchExport, 0, (wxALL ^ wxLEFT) | wxALIGN_CENTER_VERTICAL, ID_BORDER);
 
   // end m_pPanelToolbar
 
@@ -3003,9 +2993,10 @@ void CFrameAnalysis::OnExportCMF(wxCommandEvent &)
 {
   ExportCMF();
 }
-
-void CFrameAnalysis::OnBatchExport(wxCommandEvent &) {
-	for (int i = 0; i < m_pGrid->GetNumberRows(); ++i) {
+void CFrameAnalysis::BatchExport() {
+	int numberSamples = m_pGrid->GetNumberRows();
+	wxProgressDialog *progress = new wxProgressDialog(_T("Batch Plot Export"), _T("Setting Up Batch Export..."));
+	for (int i = 0; i < numberSamples; ++i) {
 		if (_XmlFile())
 		{
 			wxString sFile = _GetGraphicFileName(i, true);
@@ -3013,8 +3004,11 @@ void CFrameAnalysis::OnBatchExport(wxCommandEvent &) {
 			{
 				m_pParent->PrintFile(sFile, m_pOARfile);
 			}
+			progress->Update(round(((float)(i + 1) / (float)numberSamples) * 100.0),_T("Exporting: ") + _GetGraphicFileName(i, true).AfterLast(_T('\\')));
 		}
 	}
+	progress->Close();
+	delete progress;
 }
 
 BEGIN_EVENT_TABLE(CFrameAnalysis,CMDIFrame)
@@ -3043,8 +3037,6 @@ EVT_GRID_CMD_LABEL_LEFT_DCLICK(IDgridLocus,CFrameAnalysis::OnEditFromGrid)
 EVT_GRID_CMD_CELL_LEFT_DCLICK(IDgridLocus,CFrameAnalysis::OnEditFromGrid)
 EVT_GRID_CMD_LABEL_RIGHT_CLICK(IDgridLocus,CFrameAnalysis::OnEditMenu)
 EVT_GRID_CMD_CELL_RIGHT_CLICK(IDgridLocus,CFrameAnalysis::OnEditMenu)
-
-EVT_BUTTON(IDBatchExport, CFrameAnalysis::OnBatchExport)
 
 EVT_CLOSE(CFrameAnalysis::OnClose)
 END_EVENT_TABLE()

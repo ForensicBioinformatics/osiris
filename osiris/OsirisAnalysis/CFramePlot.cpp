@@ -1964,6 +1964,8 @@ bool CFramePlot::PrintPlot(wxString sFileName, wxString title) {
 }
 void CFramePlot::OnBatchExport() {
 	wxFileName sFNO = wxFileName(GetFileName(), wxPathFormat::wxPATH_NATIVE);
+	sFNO.AppendDir(_T("batchexport"));
+	wxMkDir(sFNO.GetPath());
 	sFNO.SetExt(_T("png"));
 	wxString baseName = sFNO.GetName();
 
@@ -1978,7 +1980,7 @@ void CFramePlot::OnBatchExport() {
 		firstPlot->RebuildLabels();
 		firstPlot->ZoomOut();
 		sFNO.SetName(baseName + _T("-A" << i));
-		PrintPlot(sFNO.GetFullPath(), (wxString)"Analysed, Channel " << i);
+		PrintPlot(sFNO.GetFullPath(), (wxString)"Analyzed, Channel " << i);
 	}
 	firstPlot->GetMenuPlot()->ShowAnalyzed(false);
 	firstPlot->GetMenuPlot()->ShowRaw(true);

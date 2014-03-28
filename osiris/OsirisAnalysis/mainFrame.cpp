@@ -822,6 +822,13 @@ void mainFrame::OnCheckForUpdates(wxCommandEvent &)
     ErrorMessage(_T("Cannot run a browser to check this version of OSIRIS"));
   }
 }
+void mainFrame::OnBatchPlotExport(wxCommandEvent &) {
+	CParmOsirisGlobal parm;
+	parm->GetGlobal();
+	parm->SetAbortExport(true);
+	CDialogBatchPlotExport x(this);
+	if (!parm->GetAbortExport()) GetAnalysisFrame()->BatchExport();
+}
 void mainFrame::OnAbout(wxCommandEvent &)
 {
   CDialogAbout x(this);
@@ -1439,6 +1446,7 @@ EVT_MENU(IDlistMRU,   mainFrame::OnRecentFiles)
 EVT_MENU(IDlab,       mainFrame::OnLabSettings)
 EVT_MENU(IDexport,    mainFrame::OnExportSettings)
 EVT_MENU(IDeditColours, mainFrame::OnEditGridColours)
+EVT_MENU(IDBatchExport, mainFrame::OnBatchPlotExport)
 EVT_MENU(IDanalyze,   mainFrame::OnAnalyze)
 EVT_MENU(IDopenPlot,  mainFrame::OnOpenPlot)
 EVT_MENU(IDopenBatch, mainFrame::OnOpenBatch)
