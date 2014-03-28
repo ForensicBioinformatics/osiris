@@ -2995,7 +2995,8 @@ void CFrameAnalysis::OnExportCMF(wxCommandEvent &)
 }
 void CFrameAnalysis::BatchExport() {
 	int numberSamples = m_pGrid->GetNumberRows();
-	wxProgressDialog *progress = new wxProgressDialog(_T("Batch Plot Export"), _T("Setting Up Batch Export..."));
+	wxProgressDialog *progress = new wxProgressDialog(_T("Batch Plot Export"), _T("Setting Up Batch Export..."),100,this, wxPD_SMOOTH | wxPD_AUTO_HIDE | wxPD_REMAINING_TIME | wxPD_CAN_ABORT);
+	progress->SetFocus();
 	for (int i = 0; i < numberSamples; ++i) {
 		if (_XmlFile())
 		{
@@ -3004,9 +3005,13 @@ void CFrameAnalysis::BatchExport() {
 			{
 				m_pParent->PrintFile(sFile, m_pOARfile);
 			}
-			progress->Update(round(((float)(i + 1) / (float)numberSamples) * 100.0),_T("Exporting: ") + _GetGraphicFileName(i, true).AfterLast(_T('\\')));
+			if (!progress->Update(round(((float)(i + 1) / (float)numberSamples) * 100.0), _T("Exporting: ") + _GetGraphicFileName(i, true).AfterLast(_T('\\')))) {
+				progress->Destroy();
+				return;
+			};
 		}
 	}
+	progress->Update(100, _T("Export Complete"));
 	progress->Close();
 	delete progress;
 }

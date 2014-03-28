@@ -939,7 +939,6 @@ void mainFrame::PrintFile(const wxString sFileName, COARfile *pOARfile) {
 	if (CheckMaxFrames(true)) { ; }
 	else if (FileInProgress(sFileName, true)) { ; }
 	else {
-		wxBusyCursor bzc;
 		wxString sFileLower(sFileName);
 		sFileLower.MakeLower();
 		PrintGraphicFile(sFileName, pOARfile);

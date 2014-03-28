@@ -1932,7 +1932,6 @@ void CFramePlot::OnSize(wxSizeEvent &e)
   }
 }
 bool CFramePlot::PrintPlot(wxString sFileName, wxString title) {
-	wxBusyCursor cr;
 	wxString sError;
 	wxBitmap *m_pBitmap = CreateBitmap(1600, 900, 72, title);
 	bool returnFlag = true;
@@ -1963,6 +1962,8 @@ bool CFramePlot::PrintPlot(wxString sFileName, wxString title) {
 	return returnFlag;
 }
 void CFramePlot::OnBatchExport() {
+	CParmOsirisGlobal parm;
+	parm->GetGlobal();
 	wxFileName sFNO = wxFileName(GetFileName(), wxPathFormat::wxPATH_NATIVE);
 	sFNO.AppendDir(_T("batchexport"));
 	wxMkDir(sFNO.GetPath());
@@ -1978,7 +1979,8 @@ void CFramePlot::OnBatchExport() {
 		firstPlot->ShowOneChannel(i);
 		firstPlot->RebuildCurves();
 		firstPlot->RebuildLabels();
-		firstPlot->ZoomOut();
+		if (parm->GetBatchZoom() == 0) firstPlot->ZoomOut();
+		else if (parm->GetBatchZoom() == 1) firstPlot->SetViewRect(wxRect2DDouble(parm->GetBatchMinTime(), parm->GetBatchMinRFU(), parm->GetBatchMaxTime() - parm->GetBatchMinTime(), parm->GetBatchMaxRFU() - parm->GetBatchMinRFU()));
 		sFNO.SetName(baseName + _T("-A" << i));
 		PrintPlot(sFNO.GetFullPath(), (wxString)"Analyzed, Channel " << i);
 	}
@@ -1988,7 +1990,8 @@ void CFramePlot::OnBatchExport() {
 		firstPlot->ShowOneChannel(i);
 		firstPlot->RebuildCurves();
 		firstPlot->RebuildLabels();
-		firstPlot->ZoomOut();
+		if (parm->GetBatchZoom() == 0) firstPlot->ZoomOut();
+		else if (parm->GetBatchZoom() == 1) firstPlot->SetViewRect(wxRect2DDouble(parm->GetBatchMinTime(), parm->GetBatchMinRFU(), parm->GetBatchMaxTime() - parm->GetBatchMinTime(), parm->GetBatchMaxRFU() - parm->GetBatchMinRFU()));
 		sFNO.SetName(baseName + _T("-R" << i));
 		PrintPlot(sFNO.GetFullPath(), (wxString)"Raw, Channel " << i);
 	}
@@ -1998,7 +2001,8 @@ void CFramePlot::OnBatchExport() {
 		firstPlot->ShowOneChannel(i);
 		firstPlot->RebuildCurves();
 		firstPlot->RebuildLabels();
-		firstPlot->ZoomOut();
+		if (parm->GetBatchZoom() == 0) firstPlot->ZoomOut();
+		else if (parm->GetBatchZoom() == 1) firstPlot->SetViewRect(wxRect2DDouble(parm->GetBatchMinTime(), parm->GetBatchMinRFU(), parm->GetBatchMaxTime() - parm->GetBatchMinTime(), parm->GetBatchMaxRFU() - parm->GetBatchMinRFU()));
 		sFNO.SetName(baseName + _T("-L" << i));
 		PrintPlot(sFNO.GetFullPath(), (wxString)"Ladder, Channel " << i);
 	}

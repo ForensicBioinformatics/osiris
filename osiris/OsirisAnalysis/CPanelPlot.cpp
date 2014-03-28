@@ -614,16 +614,43 @@ wxString CPanelPlot::_AlleleLabel(
 	  sLabel = _T("");
 	  selection = new vector<wxString>();
 	  selection->resize(5);
-	  if (CanShowPeakArea() && parm->GetMultiLabelPeakArea()) selection->push_back(wxT("PA: ") + nwxString::FormatNumber(pPeak->GetPeakArea()));
-	  if (parm->GetMultiLabelTime()) selection->push_back(wxT("TI: ") + nwxString::FormatNumber(pPeak->GetTime()));
-	  if (parm->GetMultiLabelRFU()) selection->push_back(wxT("RF: ") + nwxString::FormatNumber(nwxRound::Round(pPeak->GetRFU())));
-	  if (parm->GetMultiLabelBPS()) selection->push_back(wxT("BP: ") + nwxString::FormatNumber(nwxRound::Round(pPeak->GetBPS())));
-	  if (parm->GetMultiLabelAllele()) selection->push_back(wxT("AL: ") + COARpeak::FormatAlleleName(*pPeak, COARlocus::IsAmel(pPeak->GetLocusName()), true));
+	  if (CanShowPeakArea() && pPeak->GetPeakArea() > 0 && parm->GetMultiLabelPeakArea()) {
+		  if (!parm->GetMultiLineLabel()) selection->push_back(nwxString::FormatNumber(
+			  pPeak->GetPeakArea())); else selection->push_back("PA: " + nwxString::FormatNumber(
+			  pPeak->GetPeakArea()));
+	  }
+	  if (parm->GetMultiLabelTime()) {
+		  if (!parm->GetMultiLineLabel()) selection->push_back(nwxString::FormatNumber(pPeak->GetTime())); else selection->push_back("TI: " + nwxString::FormatNumber(pPeak->GetTime()));
+	  }
+	  if (parm->GetMultiLabelRFU()) {
+		  if (!parm->GetMultiLineLabel()) selection->push_back(nwxString::FormatNumber(
+			  nwxRound::Round(pPeak->GetRFU()))); else selection->push_back("RF: " + nwxString::FormatNumber(
+			  nwxRound::Round(pPeak->GetRFU())));
+	  }
+	  if (parm->GetMultiLabelBPS()) {
+		  if (!parm->GetMultiLineLabel()) selection->push_back(nwxString::FormatNumber(
+			  nwxRound::Round(pPeak->GetBPS()))); else selection->push_back("BP: " + nwxString::FormatNumber(
+			  nwxRound::Round(pPeak->GetBPS())));
+	  }
+	  if (parm->GetMultiLabelAllele()) {
+		  if (!parm->GetMultiLineLabel()) selection->push_back(COARpeak::FormatAlleleName(
+			  *pPeak,
+			  COARlocus::IsAmel(pPeak->GetLocusName()),
+			  true)); else selection->push_back("AL: " + COARpeak::FormatAlleleName(
+			  *pPeak,
+			  COARlocus::IsAmel(pPeak->GetLocusName()),
+			  true));
+	  }
+	  selection->shrink_to_fit();
 	  for (unsigned int i = 0; i < selection->size(); i++) {
 		  sLabel += selection->back();
-		  if (parm->GetMultiLineLabel() == false && selection->back() != wxEmptyString) sLabel += wxT("; "); else sLabel += wxT("\n");
 		  selection->pop_back();
+		  if (selection->back() != wxEmptyString) {
+
+			  if (!parm->GetMultiLineLabel()) sLabel += wxT(", "); else sLabel += wxT("\n");
+		  }
 	  }
+	  delete selection;
 	  break;
   case LABEL_ALLELE:
     sLabel = COARpeak::FormatAlleleName(
