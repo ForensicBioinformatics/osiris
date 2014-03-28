@@ -302,6 +302,22 @@ void CMDIfileManager::RefreshAllOAR()
     }
   }
 }
+void CMDIfileManager::RefreshAllLabels() {
+	wxBusyCursor xxx;
+	CMDI_WF::iterator itr;
+	CFrameAnalysis *pf;
+	CFramePlot *pp;
+	for (itr = m_mapWindowFile.begin();_IteratorOK(itr);++itr) {
+		if (itr->first->GetType() == CMDIFrame::FRAME_ANALYSIS)	{
+			pf = (CFrameAnalysis *)(itr->first);
+			pf->RepaintData();
+		} 
+		else if (itr->first->GetType() == CMDIFrame::FRAME_PLOT) {
+			pp = (CFramePlot *)(itr->first);
+			pp->RebuildLabels();
+		}
+	}
+}
 bool CMDIfileManager::CloseAll()
 {
   size_t nSize = m_mapWindowFile.size();

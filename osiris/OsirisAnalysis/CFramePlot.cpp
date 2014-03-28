@@ -586,7 +586,7 @@ void CFramePlot::UpdateOARfile(const wxString &sSampleName)
       (GetSelectedTime() == NULL)
       )
   {
-    _RebuildLabels(true);
+    RebuildLabels(true);
   }
 /*
   _SetupTitle();
@@ -682,7 +682,7 @@ void CFramePlot::SetOARfile(COARfile *pFile)
         (*itr)->SetOARfile(m_pOARfile);
       }
     }
-    _RebuildLabels(true);
+    RebuildLabels(true);
     //  need to send a resize event because
     //  the combo box does not resize when
     //  peak area is added
@@ -715,7 +715,7 @@ void CFramePlot::_SetupHistoryMenu()
     }
   }
 }
-void CFramePlot::_RebuildLabels(bool bForce)
+void CFramePlot::RebuildLabels(bool bForce)
 {
   const wxDateTime *pTime = m_pMenuHistory->GetSelected();
   if( bForce || (!m_TimeLastRebuild.IsEqualTo(pTime)) )
@@ -726,6 +726,13 @@ void CFramePlot::_RebuildLabels(bool bForce)
       itr != m_setPlots.end();
       ++itr)
     {
+		/*
+		This refers to an old function of the same name. CFramePlot::_RebuildLabels was exposed 
+		for CMDIfileManager::RefreshAllLabels, and was renamed RebuildLabels to comply with 
+		public/private naming convention.
+
+		-mdavis
+		*/
 //      (*itr)->RebuildLabels(true);
       (*itr)->LabelTypeChanged();
       (*itr)->UpdateHistoryButtons();
@@ -808,7 +815,7 @@ bool CFramePlot::MenuEvent(wxCommandEvent &e)
       m_pMenuHistoryPopup->Select(nID);
     }
 #endif
-    _RebuildLabels(true);
+    RebuildLabels(true);
   }
   else if(nID == IDmenuHistoryTop)
   {
@@ -1051,12 +1058,12 @@ void CFramePlot::OnHistoryUpdate(wxCommandEvent &e)
   {
     m_pMenuHistory->SelectTime(pPanel->GetSelectedTime());
   }
-  _RebuildLabels(false);
+  RebuildLabels(false);
 }
 #else
 void CFramePlot::OnHistoryUpdate(wxCommandEvent &)
 {
-  _RebuildLabels(false);
+  RebuildLabels(false);
 }
 #endif
 void CFramePlot::UpdateHistory()
@@ -1072,7 +1079,7 @@ void CFramePlot::UpdateHistory()
   {
     _SetupHistoryMenu(); // rebuild history menu
     _SetupTitle();
-    _RebuildLabels(true);
+    RebuildLabels(true);
   }
 }
 
@@ -1963,7 +1970,7 @@ void CFramePlot::OnBatchExport() {
 	CPanelPlot *firstPlot = *m_setPlots.begin();
 	RemoveAllPlotsExcept(firstPlot);
 	int currentLabelType = firstPlot->GetLabelType();
-	firstPlot->SetLabelType(LABEL_ALL);
+	firstPlot->SetLabelType(LABEL_MULTIPLE);
 
 	for (int i = firstPlot->GetPlotData()->GetChannelCount(); i > 0; --i) {
 		firstPlot->ShowOneChannel(i);

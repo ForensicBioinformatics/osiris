@@ -2277,15 +2277,15 @@ void CFrameAnalysis::OnLabelTypeChangedMenu(wxCommandEvent &e)
 }
 void CFrameAnalysis::OnLabelTypeChanged(wxCommandEvent &)
 {
-  CParmOsirisGlobal parm;
-  int nLabel = m_pComboCellType->GetCurrentSelection();
-  if(m_pMenu != NULL)
-  {
-    m_pMenu->SetCellTypeFromComboBox(m_pComboCellType);
-  }
-  parm->SetTableDisplayPeak(nLabel);
-  RepaintGridXML();
-  _UpdatePreviewLabelType(nLabel);
+	CParmOsirisGlobal parm;
+	int nLabel = m_pComboCellType->GetCurrentSelection();
+	if (m_pMenu != NULL)
+	{
+		m_pMenu->SetCellTypeFromComboBox(m_pComboCellType);
+	}
+	parm->SetTableDisplayPeak(nLabel);
+	RepaintGridXML();
+	_UpdatePreviewLabelType(nLabel);
 }
 void CFrameAnalysis::OnClickCell(wxGridEvent &e)
 {

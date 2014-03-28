@@ -67,7 +67,7 @@ void CComboLabels::GetChoices(
     if(bPlot)
     {
 	  pas->Add(_T("None"));
-	  pas->Add(_T("All"));
+	  pas->Add(_T("Multiple"));
     }
     pas->Add(g_sAlleles);
     pas->Add(_T("BPS"));
@@ -84,7 +84,7 @@ void CComboLabels::GetChoices(
     if(bPlot)
     {
       panID->Add(IDmenuDisplayNone + nBase);
-	  panID->Add(IDmenuDisplayAll + nBase);
+	  panID->Add(IDmenuDisplayMultiple + nBase);
     }
     panID->Add(IDmenuDisplayAlleles + nBase);
     panID->Add(IDmenuDisplayBPS + nBase);

@@ -230,6 +230,9 @@ void CMenuPlot::_Build(CPlotData *pData, CKitColors *pColors)
     _ID(IDmenuPlotRFU),
     _T("Show minimum RFU"));
   m_pMenuItemLabels = AppendSubMenu(m_pMenuLabels,_T("Labels"));
+  Append(IDMultipleLabelSettings,
+	  _T("Multiple Label Settings"), 
+	  _T("Configure multiline peak labels"));
   AppendSubMenu(m_pMenuArtifact,_T("Artifacts"));
   AppendCheckItem(
     _ID(IDmenuPlotLadderLabels),

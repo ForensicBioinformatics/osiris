@@ -604,27 +604,27 @@ void CPanelPlot::SetOARfile(COARfile *pFile)
 wxString CPanelPlot::_AlleleLabel(
   const IOARpeak *pPeak, LABEL_PLOT_TYPE nType)
 {
+  CParmOsirisGlobal parm;
+  parm->GetGlobal();
   wxString sLabel;
+  vector<wxString> *selection;
   switch(nType)
   {
-  case LABEL_ALL:
-	  sLabel = wxT("AL: ") + 
-		  COARpeak::FormatAlleleName(
-		  *pPeak,
-		  COARlocus::IsAmel(pPeak->GetLocusName()),
-		  true) + 
-		  wxT("\nBP: ") + 
-		  nwxString::FormatNumber(
-		  nwxRound::Round(pPeak->GetBPS())) +
-		  wxT("\nRF: ") + 
-		  nwxString::FormatNumber(
-		  nwxRound::Round(pPeak->GetRFU())) +
-		  wxT("\nTI: ") + 
-		  nwxString::FormatNumber(pPeak->GetTime()) +
-		  wxT("\nPA: ") + 
-		  nwxString::FormatNumber(
-		  pPeak->GetPeakArea());
-	break;
+  case LABEL_MULTIPLE:
+	  sLabel = _T("");
+	  selection = new vector<wxString>();
+	  selection->resize(5);
+	  if (CanShowPeakArea() && parm->GetMultiLabelPeakArea()) selection->push_back(wxT("PA: ") + nwxString::FormatNumber(pPeak->GetPeakArea()));
+	  if (parm->GetMultiLabelTime()) selection->push_back(wxT("TI: ") + nwxString::FormatNumber(pPeak->GetTime()));
+	  if (parm->GetMultiLabelRFU()) selection->push_back(wxT("RF: ") + nwxString::FormatNumber(nwxRound::Round(pPeak->GetRFU())));
+	  if (parm->GetMultiLabelBPS()) selection->push_back(wxT("BP: ") + nwxString::FormatNumber(nwxRound::Round(pPeak->GetBPS())));
+	  if (parm->GetMultiLabelAllele()) selection->push_back(wxT("AL: ") + COARpeak::FormatAlleleName(*pPeak, COARlocus::IsAmel(pPeak->GetLocusName()), true));
+	  for (unsigned int i = 0; i < selection->size(); i++) {
+		  sLabel += selection->back();
+		  if (parm->GetMultiLineLabel() == false && selection->back() != wxEmptyString) sLabel += wxT("; "); else sLabel += wxT("\n");
+		  selection->pop_back();
+	  }
+	  break;
   case LABEL_ALLELE:
     sLabel = COARpeak::FormatAlleleName(
       *pPeak,

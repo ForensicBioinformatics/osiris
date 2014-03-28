@@ -842,6 +842,10 @@ void mainFrame::OnMaxLadderLabels(wxCommandEvent &)
     m_MDImgr.UpdateLadderLabels();
   }
 }
+void mainFrame::OnMultipleLabelSettings(wxCommandEvent &) {
+	CDialogMultipleLabelSettings x(this);
+	m_MDImgr.RefreshAllLabels();
+}
 CFrameAnalysis *mainFrame::GetAnalysisFrame()
 {
   CFrameAnalysis *p = 
@@ -1425,9 +1429,6 @@ void mainFrame::OnDropFiles(wxCommandEvent &)
   OpenFiles(m_pDropTarget->GetFiles());
 }
 
-void mainFrame::OnBatchPlotExport(wxCommandEvent &) {
-}
-
 BEGIN_EVENT_TABLE(mainFrame,wxMDIParentFrame)
 EVT_MENU_OPEN(mainFrame::OnMenuOpen)
 EVT_MENU_CLOSE(mainFrame::OnMenuClose)
@@ -1438,7 +1439,6 @@ EVT_MENU(IDlistMRU,   mainFrame::OnRecentFiles)
 EVT_MENU(IDlab,       mainFrame::OnLabSettings)
 EVT_MENU(IDexport,    mainFrame::OnExportSettings)
 EVT_MENU(IDeditColours, mainFrame::OnEditGridColours)
-EVT_MENU(IDbatchPlotExport, mainFrame::OnBatchPlotExport)
 EVT_MENU(IDanalyze,   mainFrame::OnAnalyze)
 EVT_MENU(IDopenPlot,  mainFrame::OnOpenPlot)
 EVT_MENU(IDopenBatch, mainFrame::OnOpenBatch)
@@ -1449,6 +1449,7 @@ EVT_MENU(IDcheckForUpdates, mainFrame::OnCheckForUpdates)
 EVT_MENU(IDhelpContactUs, mainFrame::OnContactUs)
 EVT_MENU(IDExportGraphic, mainFrame::OnMenu)
 EVT_MENU(IDMaxLadderLabels, mainFrame::OnMaxLadderLabels)
+EVT_MENU(IDMultipleLabelSettings, mainFrame::OnMultipleLabelSettings)
 
 EVT_MENU(wxID_SAVEAS, mainFrame::OnSave)
 EVT_MENU(wxID_SAVE, mainFrame::OnSave)
